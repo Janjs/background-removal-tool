@@ -3,4 +3,4 @@
 *.pth
 U-2-Net
 __pycache__
-venv
+venv/
