@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import Base64 from "./Base64";
 import { isEmpty } from './Utils';
 
+const API = "https://background-removal-api.herokuapp.com/"
+
 function App() {
   const [picture, setPicture] = useState({});
   const [picturePreview, setPicturePreview] = useState({});
@@ -20,7 +22,7 @@ function App() {
     var formData = new FormData()
     formData.append('data', picture);
 
-    const resp = await fetch("/removebg", {
+    const resp = await fetch(API+"/removebg", {
       method: "POST",
       body: formData,
     }).then(async (res) => {
@@ -31,7 +33,7 @@ function App() {
       return base64Flag + imageStr;
     });
 
-    const mask = await fetch("/removebgmask", {
+    const mask = await fetch(API+"/removebgmask", {
       method: "POST",
       body: formData,
     }).then(async (res) => {
