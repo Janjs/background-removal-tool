@@ -30,7 +30,7 @@ const Base64 = {
         let str = input.replace(/=+$/, "");
         let output = "";
 
-        if (str.length % 4 == 1) {
+        if (str.length % 4 === 1) {
             throw new Error(
                 "'atob' failed: The string to be decoded is not correctly encoded."
             );
