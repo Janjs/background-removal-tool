@@ -1,6 +1,5 @@
 .vscode
 .DS_Store
-*.pth
-U-2-Net
+*.pth 
 __pycache__
 venv/
