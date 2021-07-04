@@ -11,6 +11,7 @@ function App() {
   const [pictureBGRemoved, setPictureBGRemoved] = useState({});
   const [pictureBGMask, setPictureBGMask] = useState({});
   const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
 
   const uploadPicture = (e) => {
     setPicture(e.target.files[0])
@@ -31,8 +32,11 @@ function App() {
       const base64Flag = "data:image/png;base64,";
       const imageStr = arrayBufferToBase64(buffer);
       return base64Flag + imageStr;
+    }).catch((err) => {
+      setErrorMsg("Background removal failed: "+JSON.stringify(err))
     });
 
+    /*
     const mask = await fetch(API+"removebgmask", {
       method: "POST",
       body: formData,
@@ -42,10 +46,10 @@ function App() {
       const base64Flag = "data:image/png;base64,";
       const imageStr = arrayBufferToBase64(buffer);
       return base64Flag + imageStr;
-    });
+    });*/
 
     setPictureBGRemoved(resp)
-    setPictureBGMask(mask)
+    //setPictureBGMask(mask)
     setLoading(false)
   };
 
@@ -68,7 +72,8 @@ function App() {
       <br />
       {loading && <p>Removing background...</p>}
       {!isEmpty(pictureBGMask) && <img src={pictureBGMask} width="auto" height="300" alt="output"></img>}
-      {!isEmpty(pictureBGRemoved) && <img src={pictureBGRemoved} width="auto" height="300" alt="output"></img>}
+      {/*!isEmpty(pictureBGRemoved) && <img src={pictureBGRemoved} width="auto" height="300" alt="output"></img>*/}
+      {errorMsg.length >= 0 && <p>{errorMsg}</p>}
     </div>
   );
 }
