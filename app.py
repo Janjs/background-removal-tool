@@ -18,7 +18,7 @@ CORS(app)
 
 
 # Simple probe.
-@app.route('/removebg', methods=['GET'])
+@app.route('/', methods=['GET'])
 def hello():
     return {'msg': 'Hello U^2-Net!'}
 
