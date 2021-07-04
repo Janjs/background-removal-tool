@@ -22,7 +22,7 @@ function App() {
     var formData = new FormData()
     formData.append('data', picture);
 
-    const resp = await fetch(API+"/removebg", {
+    const resp = await fetch(API+"removebg", {
       method: "POST",
       body: formData,
     }).then(async (res) => {
@@ -33,7 +33,7 @@ function App() {
       return base64Flag + imageStr;
     });
 
-    const mask = await fetch(API+"/removebgmask", {
+    const mask = await fetch(API+"removebgmask", {
       method: "POST",
       body: formData,
     }).then(async (res) => {
