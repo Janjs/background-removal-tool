@@ -141,9 +141,9 @@ def manualRemoval(url=None, fromUrl=False):
 
 if __name__ == '__main__':
     manual = len(sys.argv) >= 2
-    fromUrl = sys.argv[1][:4] == 'http'
 
     if manual:
+        fromUrl = sys.argv[1][:4] == 'http'
         manualRemoval(url=sys.argv[1], fromUrl=fromUrl)
     else:
         os.environ['FLASK_ENV'] = 'development'
