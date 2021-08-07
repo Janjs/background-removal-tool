@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import Base64 from "./Base64";
 import { isEmpty } from './Utils';
 
-const API = "https://background-removal-api.herokuapp.com/"
+const API = "http://localhost:8081/"
 
 function App() {
   const [picture, setPicture] = useState({});
@@ -36,7 +36,6 @@ function App() {
       setErrorMsg("Background removal failed: "+JSON.stringify(err))
     });
 
-    /*
     const mask = await fetch(API+"removebgmask", {
       method: "POST",
       body: formData,
@@ -46,10 +45,10 @@ function App() {
       const base64Flag = "data:image/png;base64,";
       const imageStr = arrayBufferToBase64(buffer);
       return base64Flag + imageStr;
-    });*/
+    });
 
     setPictureBGRemoved(resp)
-    //setPictureBGMask(mask)
+    setPictureBGMask(mask)
     setLoading(false)
   };
 
@@ -72,7 +71,7 @@ function App() {
       <br />
       {loading && <p>Removing background...</p>}
       {!isEmpty(pictureBGMask) && <img src={pictureBGMask} width="auto" height="300" alt="output"></img>}
-      {/*!isEmpty(pictureBGRemoved) && <img src={pictureBGRemoved} width="auto" height="300" alt="output"></img>*/}
+      {!isEmpty(pictureBGRemoved) && <img src={pictureBGRemoved} width="auto" height="300" alt="output"></img>}
       {errorMsg.length >= 0 && <p>{errorMsg}</p>}
     </div>
   );

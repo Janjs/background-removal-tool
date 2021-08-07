@@ -2,12 +2,13 @@ import io
 import os
 import sys
 from flask import Flask, request, send_file, jsonify
+from flask.helpers import url_for
 from flask_cors import CORS
 from PIL import Image
 import numpy as np
 import time
 import logging
-
+import requests
 import u2net
 
 logging.basicConfig(level=logging.INFO)
@@ -20,7 +21,7 @@ CORS(app)
 # Simple probe.
 @app.route('/', methods=['GET'])
 def hello():
-    return {'msg': 'Hello U^2-Net!'}
+    return '<h1>Background Removal API</h1>'
 
 
 # Route http posts to this method
@@ -100,41 +101,50 @@ def naive_cutout(img, mask):
     return cutout
 
 
-def backgroundRemoval(image_path):
+def backgroundRemoval(image_path, fromUrl=False, showOutput=False):
     start = time.time()
 
     # Get original dataset 
-    img = Image.open(image_path)
+    if not(fromUrl):
+        img = Image.open(image_path)
+    else:
+        img = Image.open(requests.get(image_path, stream=True).raw)
 
     # Process Image
     mask = u2net.run(np.array(img)).convert("L")
 
     # masking
     img_bg_removed = naive_cutout(img, mask)
-    #img_bg_removed.show()
-    
+    if showOutput:
+        img_bg_removed.show()
+    else:
+        img_bg_removed.save("./output_dataset_png/"+image_path.split(".")[0]+".png")
+
     ## convert to JPG
     #img_bg_removed = img_bg_removed.convert('RGB') 
-    img_bg_removed.save("./output_dataset_png/"+image_path.split(".")[0]+".png")
 
     # Print stats
     logging.info(f'{image_path} Completed in {time.time() - start:.2f}s')
 
-def manualRemoval():
+def manualRemoval(url=None, fromUrl=False):
     start = time.time()
-    images_paths = os.listdir("./original_dataset")
-    for image_path in images_paths:
-        backgroundRemoval("./original_dataset/"+image_path)
-    # Print stats
+    if url == None:
+        images_paths = os.listdir("./original_dataset")
+        for image_path in images_paths:
+            backgroundRemoval("./original_dataset/"+image_path)
+    else:
+        backgroundRemoval(url, fromUrl, True)
+    
     logging.info(f'{len(images_paths)} images done! in {time.time() - start:.2f}s')
 
 
 
 if __name__ == '__main__':
-    manual = len(sys.argv) >= 2 and sys.argv[1] == 'manual'
+    manual = len(sys.argv) >= 2
+    fromUrl = sys.argv[1][:4] == 'http'
 
     if manual:
-        manualRemoval()
+        manualRemoval(url=sys.argv[1], fromUrl=fromUrl)
     else:
         os.environ['FLASK_ENV'] = 'development'
         port = int(os.environ.get('PORT', 8081))

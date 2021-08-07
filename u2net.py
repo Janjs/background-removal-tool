@@ -18,10 +18,10 @@ from PIL import Image
 from data_loader import RescaleT
 from data_loader import ToTensorLab
 
-# from model import U2NET  # full size version 173.6 MB
-from model import U2NETP as U2NET # small version u2net 4.7 MB
+from model import U2NET  # full size version 173.6 MB
+# from model import U2NETP as U2NET # small version u2net 4.7 MB
 
-model_dir = './U-2-Net/saved_models/u2net/u2netp.pth'
+model_dir = './U-2-Net/saved_models/u2net/u2net.pth'
 
 print("Loading U-2-Net...")
 net = U2NET(3, 1)
